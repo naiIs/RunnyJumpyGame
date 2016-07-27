@@ -13,6 +13,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.Graphics;
 //import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -26,6 +28,11 @@ import javax.swing.Timer;
  *
  * @author logan
  */
+
+//The main class of our game. We're extending a JPanel because it's a "generic
+//space where stuff happend" and implementing ActionListener because we're
+//using a timer event to fire and catch action events repeatedly to itterate
+//the game loop
 public class Board extends JPanel
         implements ActionListener {
     
@@ -49,11 +56,22 @@ public class Board extends JPanel
     public int a = 0;
     public Sprite mySprite;
     
+    public enum Direction { LEFT, RIGHT, UP, DOWN };
+    
     public Board() {
         
         //Sets up some basic properties of the game JPanel
         setBackground(Color.cyan);
         setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
+        
+        //This sets up a key listener that lets our board know when the user
+        //presses a key
+        setFocusable(true);
+        setFocusTraversalKeysEnabled(false);
+        
+        //This creates our TAdapter object and implements it as Board's
+        //prerred key listener, which gets input from the keyboard
+        addKeyListener(new TAdapter());
         
         //calls a method to initialize the game to its basic state
         initGame();
@@ -105,5 +123,33 @@ public class Board extends JPanel
     @Override
     public void actionPerformed(ActionEvent e) {
         repaint();
+    }
+    
+    //This is a sub class that records our key presses. We're using this sub-
+    //class because we only care about keyPressed and not keyReleased or
+    //keyTyped
+    private class TAdapter extends KeyAdapter {
+        
+        @Override
+        public void keyPressed(KeyEvent e) {
+            
+            int key = e.getKeyCode();
+            
+            if (key == KeyEvent.VK_LEFT){
+                ((Player)mySprite).move(1);
+            }
+            
+            if (key == KeyEvent.VK_RIGHT){
+                ((Player)mySprite).move(2);
+            }
+            
+            if (key == KeyEvent.VK_UP){
+                ((Player)mySprite).move(3);
+            }
+            
+            if (key == KeyEvent.VK_DOWN){
+                ((Player)mySprite).move(4);
+            }
+        }
     }
 }

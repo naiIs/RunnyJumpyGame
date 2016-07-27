@@ -25,6 +25,8 @@ public class Player extends Sprite{
     //different frame rate thant he base game timer.
     private int frameDelay, delayCount;
     
+    public enum Direction { LEFT, RIGHT, UP, DOWN };
+    
     public Player() {
         super();
         
@@ -71,6 +73,25 @@ public class Player extends Sprite{
         
         if (currentFrame == frames) {
            currentFrame = 0;
+        }
+    }
+    
+    public void move(int d){
+        
+        if (d == 1){
+            x--;
+        }
+        
+        if (d == 2){
+            x++;
+        }
+        
+        if (d == 3){
+            y--;
+        }
+        
+        if (d == 4){
+            y++;
         }
     }
 }

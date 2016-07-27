@@ -13,7 +13,7 @@ import java.awt.Graphics;
  */
 
 //The sprite class is the basis of all moving objects being animated on screen
-public class Sprite {
+public abstract class Sprite {
     
     //Define the image that will show the sprite and where it will
     //appear on screen
@@ -39,5 +39,7 @@ public class Sprite {
         
         g.drawImage(image, x, y, null);
     }
+    
+    //public abstract void move();
     
 }
