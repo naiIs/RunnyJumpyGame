@@ -17,7 +17,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.Graphics;
-//import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
@@ -113,10 +112,6 @@ public class Board extends JPanel
     //custom content.
     private void doDrawing(Graphics g) {
         
-        Toolkit.getDefaultToolkit().sync();
-        
-        g.drawImage(smiley, 20, 20, 35, 35, 0, 0, 15, 15, this);
-        
         mySprite.draw(g);
     }
     
@@ -126,20 +121,20 @@ public class Board extends JPanel
     public void actionPerformed(ActionEvent e) {
         
         if (key == KeyEvent.VK_LEFT){
-                ((Player)mySprite).move(Player.Direction.LEFT);
-            }
+            ((Player)mySprite).move(Player.Direction.LEFT);
+        }
             
-            if (key == KeyEvent.VK_RIGHT){
-                ((Player)mySprite).move(Player.Direction.RIGHT);
-            }
+        if (key == KeyEvent.VK_RIGHT){
+            ((Player)mySprite).move(Player.Direction.RIGHT);
+        }
             
-            if (key == KeyEvent.VK_UP){
-                ((Player)mySprite).move(Player.Direction.UP);
-            }
+        if (key == KeyEvent.VK_UP){
+            ((Player)mySprite).move(Player.Direction.UP);
+        }
             
-            if (key == KeyEvent.VK_DOWN){
-                ((Player)mySprite).move(Player.Direction.DOWN);
-            }
+        if (key == KeyEvent.VK_DOWN){
+            ((Player)mySprite).move(Player.Direction.DOWN);
+        }
             
         repaint();
     }
@@ -171,6 +166,7 @@ public class Board extends JPanel
             }*/
         }
         
+        @Override
         public void keyReleased(KeyEvent e) {
             key = 0;
         }
