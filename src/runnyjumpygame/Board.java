@@ -8,6 +8,7 @@ package runnyjumpygame;
 import java.io.IOException;
 import java.io.File;
 
+import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -43,7 +44,7 @@ public class Board extends JPanel
     //A constant to define the timer delay in MS, essentially how long the
     //game waits to execute each frame. Setting it to 33 runs the game at 
     //30 frames per second
-    private final int DELAY = 33;
+    private final int DELAY = 18;
     
     //define the timer object that's going to iterate the game. This is a swing
     //timer, not a java.util timer
@@ -57,15 +58,13 @@ public class Board extends JPanel
     public Sprite mySprite;
     
     public enum Direction { LEFT, RIGHT, UP, DOWN };
+    int key;
     
     public Board() {
         
         //Sets up some basic properties of the game JPanel
         setBackground(Color.cyan);
         setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
-        
-        //This sets up a key listener that lets our board know when the user
-        //presses a key
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
         
@@ -113,6 +112,9 @@ public class Board extends JPanel
     //this is a function where we have our graphics object draw all of our
     //custom content.
     private void doDrawing(Graphics g) {
+        
+        Toolkit.getDefaultToolkit().sync();
+        
         g.drawImage(smiley, 20, 20, 35, 35, 0, 0, 15, 15, this);
         
         mySprite.draw(g);
@@ -122,6 +124,23 @@ public class Board extends JPanel
     //All the code that should be executed each frame is here.
     @Override
     public void actionPerformed(ActionEvent e) {
+        
+        if (key == KeyEvent.VK_LEFT){
+                ((Player)mySprite).move(Player.Direction.LEFT);
+            }
+            
+            if (key == KeyEvent.VK_RIGHT){
+                ((Player)mySprite).move(Player.Direction.RIGHT);
+            }
+            
+            if (key == KeyEvent.VK_UP){
+                ((Player)mySprite).move(Player.Direction.UP);
+            }
+            
+            if (key == KeyEvent.VK_DOWN){
+                ((Player)mySprite).move(Player.Direction.DOWN);
+            }
+            
         repaint();
     }
     
@@ -133,23 +152,27 @@ public class Board extends JPanel
         @Override
         public void keyPressed(KeyEvent e) {
             
-            int key = e.getKeyCode();
+            key = e.getKeyCode();
             
-            if (key == KeyEvent.VK_LEFT){
-                ((Player)mySprite).move(1);
+            /*if (key == KeyEvent.VK_LEFT){
+                ((Player)mySprite).move(Player.Direction.LEFT);
             }
             
             if (key == KeyEvent.VK_RIGHT){
-                ((Player)mySprite).move(2);
+                ((Player)mySprite).move(Player.Direction.RIGHT);
             }
             
             if (key == KeyEvent.VK_UP){
-                ((Player)mySprite).move(3);
+                ((Player)mySprite).move(Player.Direction.UP);
             }
             
             if (key == KeyEvent.VK_DOWN){
-                ((Player)mySprite).move(4);
-            }
+                ((Player)mySprite).move(Player.Direction.DOWN);
+            }*/
+        }
+        
+        public void keyReleased(KeyEvent e) {
+            key = 0;
         }
     }
 }

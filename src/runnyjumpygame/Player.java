@@ -17,15 +17,19 @@ public class Player extends Sprite{
     //size of the sprite sheet.
     private int width, height;
     
-    //This is the number of frames on the sprite sheet, and which frame we're
-    //currently displaying
+    //This is the number of frames on the sprite sheet, and which frame we're 
+   //currently displaying
     private int frames, currentFrame;
     
     //This is the delay between frames, so that sprites can be animated at a
     //different frame rate thant he base game timer.
     private int frameDelay, delayCount;
     
+    //This enum is used to interperet input from the keyListener in Board.java
     public enum Direction { LEFT, RIGHT, UP, DOWN };
+    
+    //This int tells us how far we're goig to move each frame when we're moving
+    private int speed;
     
     public Player() {
         super();
@@ -36,6 +40,7 @@ public class Player extends Sprite{
         this.currentFrame = 0;
         this.frameDelay = 9;
         delayCount = 0;
+        speed = 5;
     }
     
     public Player(BufferedImage image, int x, int y, int width, int height,
@@ -49,6 +54,7 @@ public class Player extends Sprite{
         currentFrame = 0;
         frameDelay = 9;
         delayCount = 0;
+        speed = 5;
     }
     
     //This method covers all of our logic to draw the sprite.
@@ -76,22 +82,44 @@ public class Player extends Sprite{
         }
     }
     
-    public void move(int d){
+    public void move(Direction d){
         
-        if (d == 1){
+        switch (d){
+            
+            case LEFT:
+                x -= speed;
+                break;
+                
+            case RIGHT:
+                x += speed;
+                break;
+                
+            case UP:
+                y -= speed;
+                break;
+                
+            case DOWN:
+                y += speed;
+                break;
+                
+            default:
+                break;
+        }
+        
+        /*if (d == d.LEFT){
             x--;
         }
         
-        if (d == 2){
+        if (d == d.RIGHT){
             x++;
         }
         
-        if (d == 3){
+        if (d == d.UP){
             y--;
         }
         
-        if (d == 4){
+        if (d == d.DOWN){
             y++;
-        }
+        }*/
     }
 }
