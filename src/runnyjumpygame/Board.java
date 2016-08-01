@@ -198,22 +198,6 @@ public class Board extends JPanel
             if (key == KeyEvent.VK_DOWN){
                 Direction.DOWN.press();
             }
-            
-            /*if (key == KeyEvent.VK_LEFT){
-                ((Player)mySprite).move(Player.Direction.LEFT);
-            }
-            
-            if (key == KeyEvent.VK_RIGHT){
-                ((Player)mySprite).move(Player.Direction.RIGHT);
-            }
-            
-            if (key == KeyEvent.VK_UP){
-                ((Player)mySprite).move(Player.Direction.UP);
-            }
-            
-            if (key == KeyEvent.VK_DOWN){
-                ((Player)mySprite).move(Player.Direction.DOWN);
-            }*/
         }
         
         @Override
