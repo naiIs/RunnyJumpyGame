@@ -57,8 +57,32 @@ public class Board extends JPanel
     public int a = 0;
     public Sprite mySprite;
     
-    public enum Direction { LEFT, RIGHT, UP, DOWN };
-    int key;
+    public enum Direction { 
+        LEFT    (KeyEvent.VK_LEFT), 
+        RIGHT   (KeyEvent.VK_RIGHT), 
+        UP      (KeyEvent.VK_UP), 
+        DOWN    (KeyEvent.VK_DOWN); 
+        
+        private int key;
+        private boolean pressed;
+        
+        Direction(int k){
+            key = k;
+            pressed = false;
+        }
+        
+        public boolean isPressed(){
+            return pressed;
+        }
+        
+        public void press(){
+            pressed = true;
+        }
+        
+        public void release() {
+            pressed = false;
+        }
+    };
     
     public Board() {
         
@@ -121,34 +145,59 @@ public class Board extends JPanel
     @Override
     public void actionPerformed(ActionEvent e) {
         
-        if (key == KeyEvent.VK_LEFT){
-            ((Player)mySprite).move(Player.Direction.LEFT);
-        }
-            
-        if (key == KeyEvent.VK_RIGHT){
-            ((Player)mySprite).move(Player.Direction.RIGHT);
-        }
-            
-        if (key == KeyEvent.VK_UP){
-            ((Player)mySprite).move(Player.Direction.UP);
-        }
-            
-        if (key == KeyEvent.VK_DOWN){
-            ((Player)mySprite).move(Player.Direction.DOWN);
-        }
+        movePlayer();
             
         repaint();
     }
     
+    private void movePlayer(){
+        
+        int x = 0, y = 0;
+        
+        if (Direction.UP.isPressed()){
+            y--;
+        }
+        
+        if (Direction.DOWN.isPressed()){
+            y++;
+        }
+        
+        if (Direction.LEFT.isPressed()){
+            x--;
+        }
+        
+        if (Direction.RIGHT.isPressed()){
+            x++;
+        }
+        
+        ((Player)mySprite).move(x, y);
+    }
+    
     //This is a sub class that records our key presses. We're using this sub-
-    //class because we only care about keyPressed and not keyReleased or
+    //class because we only care about keyPressed and keyReleased, not
     //keyTyped
     private class TAdapter extends KeyAdapter {
         
         @Override
         public void keyPressed(KeyEvent e) {
             
-            key = e.getKeyCode();
+            int key = e.getKeyCode();
+            
+            if (key == KeyEvent.VK_RIGHT){
+                Direction.RIGHT.press();
+            }
+            
+            if (key == KeyEvent.VK_LEFT){
+                Direction.LEFT.press();
+            }
+            
+            if (key == KeyEvent.VK_UP){
+                Direction.UP.press();
+            }
+            
+            if (key == KeyEvent.VK_DOWN){
+                Direction.DOWN.press();
+            }
             
             /*if (key == KeyEvent.VK_LEFT){
                 ((Player)mySprite).move(Player.Direction.LEFT);
@@ -169,7 +218,23 @@ public class Board extends JPanel
         
         @Override
         public void keyReleased(KeyEvent e) {
-            key = 0;
+            int key = e.getKeyCode();
+            
+            if (key == KeyEvent.VK_RIGHT){
+                Direction.RIGHT.release();
+            }
+            
+            if (key == KeyEvent.VK_LEFT){
+                Direction.LEFT.release();
+            }
+            
+            if (key == KeyEvent.VK_UP){
+                Direction.UP.release();
+            }
+            
+            if (key == KeyEvent.VK_DOWN){
+                Direction.DOWN.release();
+            }
         }
     }
 }

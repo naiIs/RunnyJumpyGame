@@ -82,9 +82,12 @@ public class Player extends Sprite{
         }
     }
     
-    public void move(Direction d){
+    public void move(int x, int y){
         
-        switch (d){
+        
+        this.x += x * speed;
+        this.y += y * speed;
+        /*switch (d){
             
             case LEFT:
                 x -= speed;
@@ -104,7 +107,7 @@ public class Player extends Sprite{
                 
             default:
                 break;
-        }
+        }*/
         
         /*if (d == d.LEFT){
             x--;
