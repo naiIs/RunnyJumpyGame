@@ -154,7 +154,95 @@ public class Board extends JPanel
     //to send to our player sprite. Because they're composited like this it
     //supports both orthogonal and diagonal movement.
     private void movePlayer(){
+<<<<<<< HEAD
                 
         ((Player)mySprite).move(t);
+=======
+        
+        int x = 0, y = 0;
+        
+        if (Direction.UP.isPressed()){
+            y--;
+        }
+        
+        if (Direction.DOWN.isPressed()){
+            y++;
+        }
+        
+        if (Direction.LEFT.isPressed()){
+            x--;
+        }
+        
+        if (Direction.RIGHT.isPressed()){
+            x++;
+        }
+        
+        ((Player)mySprite).move(x, y);
+    }
+    
+    //This is a sub class that records our key presses. We're using this sub-
+    //class because we only care about keyPressed and keyReleased, not
+    //keyTyped
+    private class TAdapter extends KeyAdapter {
+        
+        @Override
+        public void keyPressed(KeyEvent e) {
+            
+            int key = e.getKeyCode();
+            
+            if (key == KeyEvent.VK_RIGHT){
+                Direction.RIGHT.press();
+            }
+            
+            if (key == KeyEvent.VK_LEFT){
+                Direction.LEFT.press();
+            }
+            
+            if (key == KeyEvent.VK_UP){
+                Direction.UP.press();
+            }
+            
+            if (key == KeyEvent.VK_DOWN){
+                Direction.DOWN.press();
+            }
+            
+            /*if (key == KeyEvent.VK_LEFT){
+                ((Player)mySprite).move(Player.Direction.LEFT);
+            }
+            
+            if (key == KeyEvent.VK_RIGHT){
+                ((Player)mySprite).move(Player.Direction.RIGHT);
+            }
+            
+            if (key == KeyEvent.VK_UP){
+                ((Player)mySprite).move(Player.Direction.UP);
+            }
+            
+            if (key == KeyEvent.VK_DOWN){
+                ((Player)mySprite).move(Player.Direction.DOWN);
+            }*/
+        }
+        
+        @Override
+        public void keyReleased(KeyEvent e) {
+            int key = e.getKeyCode();
+            
+            if (key == KeyEvent.VK_RIGHT){
+                Direction.RIGHT.release();
+            }
+            
+            if (key == KeyEvent.VK_LEFT){
+                Direction.LEFT.release();
+            }
+            
+            if (key == KeyEvent.VK_UP){
+                Direction.UP.release();
+            }
+            
+            if (key == KeyEvent.VK_DOWN){
+                Direction.DOWN.release();
+            }
+        }
+>>>>>>> parent of bccee16... End of day commit
     }
 }

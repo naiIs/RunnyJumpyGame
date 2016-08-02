@@ -54,7 +54,7 @@ public class Player extends Sprite{
         currentFrame = 0;
         frameDelay = 9;
         delayCount = 0;
-        speed = 3;
+        speed = 5;
     }
     
     //This method covers all of our logic to draw the sprite.
