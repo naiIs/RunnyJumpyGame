@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.File;
 
 import java.awt.Toolkit;
+import java.awt.Rectangle;
 import java.awt.event.InputEvent;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -56,6 +57,8 @@ public class Board extends JPanel
     //A bunch of temporary testing variables
     public int a = 0;
     public Sprite mySprite;
+    
+    public Rectangle screenBottom;
     
     public enum Direction { 
         LEFT    (KeyEvent.VK_LEFT), 
@@ -121,6 +124,10 @@ public class Board extends JPanel
         //mySprite = new Sprite(smiley, 90, 90);
         //mySprite = new Player(smiley, 190, 190);
         mySprite = new Player(smiley, 40, 40, 30, 30, 4);
+        
+        screenBottom = new Rectangle(0, 350, B_WIDTH, 1);
+        
+        System.out.println("lolstuff");
     }
     
     //This paints the images, first by calling the super class's paintComponent
@@ -147,7 +154,15 @@ public class Board extends JPanel
         
         movePlayer();
             
+        checkCollision();
+        
         repaint();
+    }
+    
+    private void checkCollision(){
+        if (screenBottom.intersects(((Player)mySprite).getBounds())){
+            System.out.println("Intersection!");
+        }
     }
     
     private void movePlayer(){

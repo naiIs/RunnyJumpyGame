@@ -7,6 +7,8 @@ package runnyjumpygame;
 
 import java.awt.image.BufferedImage;
 import java.awt.Graphics;
+import java.awt.Rectangle;
+import java.awt.Point;
 /**
  *
  * @author logan
@@ -31,6 +33,8 @@ public class Player extends Sprite{
     //This int tells us how far we're goig to move each frame when we're moving
     private int speed;
     
+    private Rectangle bounds;
+    
     public Player() {
         super();
         
@@ -41,6 +45,7 @@ public class Player extends Sprite{
         this.frameDelay = 9;
         delayCount = 0;
         speed = 5;
+        bounds = new Rectangle(0, 0, 0, 0);
     }
     
     public Player(BufferedImage image, int x, int y, int width, int height,
@@ -55,6 +60,7 @@ public class Player extends Sprite{
         frameDelay = 9;
         delayCount = 0;
         speed = 3;
+        bounds = new Rectangle(this.x, this.y, width, height);
     }
     
     //This method covers all of our logic to draw the sprite.
@@ -80,6 +86,11 @@ public class Player extends Sprite{
         if (currentFrame == frames) {
            currentFrame = 0;
         }
+    }
+    
+    public Rectangle getBounds(){
+        bounds.setLocation(x, y);
+        return bounds;
     }
     
     public void move(int x, int y){
