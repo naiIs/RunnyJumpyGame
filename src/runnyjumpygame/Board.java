@@ -57,6 +57,8 @@ public class Board extends JPanel
     public int a = 0;
     public Sprite mySprite;
     
+    public TAdapter t;
+    
     public enum Direction { 
         LEFT    (KeyEvent.VK_LEFT), 
         RIGHT   (KeyEvent.VK_RIGHT), 
@@ -94,7 +96,8 @@ public class Board extends JPanel
         
         //This creates our TAdapter object and implements it as Board's
         //prerred key listener, which gets input from the keyboard
-        addKeyListener(new TAdapter());
+        t = new TAdapter();
+        addKeyListener((KeyListener)t);
         
         //calls a method to initialize the game to its basic state
         initGame();
@@ -117,9 +120,6 @@ public class Board extends JPanel
             
         }
         
-        //Create a new sprite with the image that we just loaded
-        //mySprite = new Sprite(smiley, 90, 90);
-        //mySprite = new Player(smiley, 190, 190);
         mySprite = new Player(smiley, 40, 40, 30, 30, 4);
     }
     
@@ -150,75 +150,11 @@ public class Board extends JPanel
         repaint();
     }
     
+    //This method gets our key presses stored in Direction and composites them
+    //to send to our player sprite. Because they're composited like this it
+    //supports both orthogonal and diagonal movement.
     private void movePlayer(){
-        
-        int x = 0, y = 0;
-        
-        if (Direction.UP.isPressed()){
-            y--;
-        }
-        
-        if (Direction.DOWN.isPressed()){
-            y++;
-        }
-        
-        if (Direction.LEFT.isPressed()){
-            x--;
-        }
-        
-        if (Direction.RIGHT.isPressed()){
-            x++;
-        }
-        
-        ((Player)mySprite).move(x, y);
-    }
-    
-    //This is a sub class that records our key presses. We're using this sub-
-    //class because we only care about keyPressed and keyReleased, not
-    //keyTyped
-    private class TAdapter extends KeyAdapter {
-        
-        @Override
-        public void keyPressed(KeyEvent e) {
-            
-            int key = e.getKeyCode();
-            
-            if (key == KeyEvent.VK_RIGHT){
-                Direction.RIGHT.press();
-            }
-            
-            if (key == KeyEvent.VK_LEFT){
-                Direction.LEFT.press();
-            }
-            
-            if (key == KeyEvent.VK_UP){
-                Direction.UP.press();
-            }
-            
-            if (key == KeyEvent.VK_DOWN){
-                Direction.DOWN.press();
-            }
-        }
-        
-        @Override
-        public void keyReleased(KeyEvent e) {
-            int key = e.getKeyCode();
-            
-            if (key == KeyEvent.VK_RIGHT){
-                Direction.RIGHT.release();
-            }
-            
-            if (key == KeyEvent.VK_LEFT){
-                Direction.LEFT.release();
-            }
-            
-            if (key == KeyEvent.VK_UP){
-                Direction.UP.release();
-            }
-            
-            if (key == KeyEvent.VK_DOWN){
-                Direction.DOWN.release();
-            }
-        }
+                
+        ((Player)mySprite).move(t);
     }
 }

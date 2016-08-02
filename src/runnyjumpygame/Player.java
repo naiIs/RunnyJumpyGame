@@ -82,47 +82,26 @@ public class Player extends Sprite{
         }
     }
     
-    public void move(int x, int y){
+    public void move(TAdapter t){
         
         
-        this.x += x * speed;
-        this.y += y * speed;
-        /*switch (d){
-            
-            case LEFT:
-                x -= speed;
-                break;
-                
-            case RIGHT:
-                x += speed;
-                break;
-                
-            case UP:
-                y -= speed;
-                break;
-                
-            case DOWN:
-                y += speed;
-                break;
-                
-            default:
-                break;
-        }*/
-        
-        /*if (d == d.LEFT){
-            x--;
-        }
-        
-        if (d == d.RIGHT){
-            x++;
-        }
-        
-        if (d == d.UP){
+        if (Board.Direction.UP.isPressed()){
             y--;
         }
         
-        if (d == d.DOWN){
+        if (Board.Direction.DOWN.isPressed()){
             y++;
-        }*/
+        }
+        
+        if (Board.Direction.LEFT.isPressed()){
+            x--;
+        }
+        
+        if (Board.Direction.RIGHT.isPressed()){
+            x++;
+        }
+        
+        this.x += x * speed;
+        this.y += y * speed;
     }
 }
