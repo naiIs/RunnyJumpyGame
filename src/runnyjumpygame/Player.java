@@ -59,7 +59,7 @@ public class Player extends Sprite{
         currentFrame = 0;
         frameDelay = 9;
         delayCount = 0;
-        speed = 3;
+        speed = 5;
         bounds = new Rectangle(this.x, this.y, width, height);
     }
     
@@ -93,47 +93,19 @@ public class Player extends Sprite{
         return bounds;
     }
     
+    public boolean collides(Rectangle r){
+        getBounds();
+        
+        if(bounds.intersects(r)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     public void move(int x, int y){
-        
-        
+                
         this.x += x * speed;
         this.y += y * speed;
-        /*switch (d){
-            
-            case LEFT:
-                x -= speed;
-                break;
-                
-            case RIGHT:
-                x += speed;
-                break;
-                
-            case UP:
-                y -= speed;
-                break;
-                
-            case DOWN:
-                y += speed;
-                break;
-                
-            default:
-                break;
-        }*/
-        
-        /*if (d == d.LEFT){
-            x--;
-        }
-        
-        if (d == d.RIGHT){
-            x++;
-        }
-        
-        if (d == d.UP){
-            y--;
-        }
-        
-        if (d == d.DOWN){
-            y++;
-        }*/
     }
 }

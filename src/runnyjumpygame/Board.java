@@ -56,7 +56,7 @@ public class Board extends JPanel
     
     //A bunch of temporary testing variables
     public int a = 0;
-    public Sprite mySprite;
+    public Player mySprite;
     
     public Rectangle screenBottom;
     
@@ -160,8 +160,9 @@ public class Board extends JPanel
     }
     
     private void checkCollision(){
-        if (screenBottom.intersects(((Player)mySprite).getBounds())){
-            System.out.println("Intersection!");
+        
+        if (mySprite.collides(screenBottom)){
+            System.out.println("intersects");
         }
     }
     
@@ -169,11 +170,7 @@ public class Board extends JPanel
         
         int x = 0, y = 0;
         
-        if (Direction.UP.isPressed()){
-            y--;
-        }
-        
-        if (Direction.DOWN.isPressed()){
+        if((!mySprite.collides(screenBottom)) && (!Direction.UP.isPressed())){
             y++;
         }
         
@@ -185,7 +182,11 @@ public class Board extends JPanel
             x++;
         }
         
-        ((Player)mySprite).move(x, y);
+        if(mySprite.collides(screenBottom)){
+            y = 0;
+        }
+        
+        mySprite.move(x, y);
     }
     
     //This is a sub class that records our key presses. We're using this sub-
