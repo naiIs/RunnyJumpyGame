@@ -31,9 +31,11 @@ public class Player extends Sprite{
     public enum Direction { LEFT, RIGHT, UP, DOWN };
     
     //This int tells us how far we're goig to move each frame when we're moving
-    private int speed;
+    private int speed, jumpHeight, airTime;
     
     private Rectangle bounds;
+    
+    private boolean airborn;
     
     public Player() {
         super();
@@ -60,6 +62,9 @@ public class Player extends Sprite{
         frameDelay = 9;
         delayCount = 0;
         speed = 5;
+        airborn = false;
+        jumpHeight = 10;
+        airTime = 0;
         bounds = new Rectangle(this.x, this.y, width, height);
     }
     
@@ -101,6 +106,11 @@ public class Player extends Sprite{
         } else {
             return false;
         }
+    }
+    
+    public void jump(){
+        
+            y -= speed;
     }
     
     public void move(int x, int y){

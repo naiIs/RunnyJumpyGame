@@ -159,13 +159,13 @@ public class Board extends JPanel
         repaint();
     }
     
-    private void checkCollision(){
+    public void checkCollision(){
         
         if (mySprite.collides(screenBottom)){
             System.out.println("intersects");
         }
     }
-    
+        
     private void movePlayer(){
         
         int x = 0, y = 0;
@@ -174,16 +174,20 @@ public class Board extends JPanel
             y++;
         }
         
+        if(mySprite.collides(screenBottom)){
+            y = 0;
+        }
+        
+        if (Direction.UP.isPressed()){
+            mySprite.jump();
+        }
+        
         if (Direction.LEFT.isPressed()){
             x--;
         }
         
         if (Direction.RIGHT.isPressed()){
             x++;
-        }
-        
-        if(mySprite.collides(screenBottom)){
-            y = 0;
         }
         
         mySprite.move(x, y);

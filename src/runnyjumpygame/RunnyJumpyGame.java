@@ -6,6 +6,8 @@
 package runnyjumpygame;
 
 import javax.swing.JFrame;
+
+import java.awt.EventQueue;
         
 /**
  *
@@ -43,8 +45,14 @@ public class RunnyJumpyGame extends JFrame {
         // TODO code application logic here
         
         //Here we're creating a new instance of the game and setting it to visible
-        JFrame rjg = new RunnyJumpyGame();
-        rjg.setVisible(true);
+        EventQueue.invokeLater(new Runnable() {
+            
+            @Override
+            public void run(){
+                JFrame rjg = new RunnyJumpyGame();
+                rjg.setVisible(true);
+            }
+        });
     }
     
 }
