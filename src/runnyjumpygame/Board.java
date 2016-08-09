@@ -8,6 +8,8 @@ package runnyjumpygame;
 import java.io.IOException;
 import java.io.File;
 
+import java.util.Vector;
+
 import java.awt.Toolkit;
 import java.awt.Rectangle;
 import java.awt.event.InputEvent;
@@ -59,6 +61,8 @@ public class Board extends JPanel
     public Player mySprite;
     
     public Rectangle screenBottom;
+    
+    public Level level;
     
     public enum Direction { 
         LEFT    (KeyEvent.VK_LEFT), 
@@ -120,12 +124,16 @@ public class Board extends JPanel
             
         }
         
+        level = new Level();
+        
         //Create a new sprite with the image that we just loaded
         //mySprite = new Sprite(smiley, 90, 90);
         //mySprite = new Player(smiley, 190, 190);
         mySprite = new Player(smiley, 40, 40, 30, 30, 4);
         
         screenBottom = new Rectangle(0, 350, B_WIDTH, 1);
+        
+        level.add(screenBottom);
         
         System.out.println("lolstuff");
     }
@@ -152,7 +160,8 @@ public class Board extends JPanel
     @Override
     public void actionPerformed(ActionEvent e) {
         
-        movePlayer();
+        //movePlayer();
+        mySprite.move(level);
             
         checkCollision();
         
@@ -161,9 +170,12 @@ public class Board extends JPanel
     
     public void checkCollision(){
         
-        if (mySprite.collides(screenBottom)){
+        if (level.collides(mySprite.getBounds())){
             System.out.println("intersects");
         }
+        //if (mySprite.collides(screenBottom)){
+        //    System.out.println("intersects");
+        //}
     }
         
     private void movePlayer(){
@@ -179,7 +191,7 @@ public class Board extends JPanel
         }
         
         if (Direction.UP.isPressed()){
-            mySprite.jump();
+            //mySprite.jump();
         }
         
         if (Direction.LEFT.isPressed()){
@@ -190,7 +202,7 @@ public class Board extends JPanel
             x++;
         }
         
-        mySprite.move(x, y);
+        //mySprite.move(x, y);
     }
     
     //This is a sub class that records our key presses. We're using this sub-

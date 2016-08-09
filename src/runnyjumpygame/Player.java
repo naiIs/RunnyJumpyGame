@@ -35,7 +35,9 @@ public class Player extends Sprite{
     
     private Rectangle bounds;
     
-    private boolean airborn;
+    private enum MoveState { JUMPING, FALLING, GROUND }
+    
+    MoveState moveState;
     
     public Player() {
         super();
@@ -47,6 +49,7 @@ public class Player extends Sprite{
         this.frameDelay = 9;
         delayCount = 0;
         speed = 5;
+        MoveState moveState;
         bounds = new Rectangle(0, 0, 0, 0);
     }
     
@@ -62,9 +65,9 @@ public class Player extends Sprite{
         frameDelay = 9;
         delayCount = 0;
         speed = 5;
-        airborn = false;
-        jumpHeight = 10;
+        jumpHeight = 22;
         airTime = 0;
+        moveState = MoveState.FALLING;
         bounds = new Rectangle(this.x, this.y, width, height);
     }
     
@@ -108,14 +111,48 @@ public class Player extends Sprite{
         }
     }
     
-    public void jump(){
+    public void move(Level l){
         
-            y -= speed;
-    }
-    
-    public void move(int x, int y){
+        switch (moveState){
+            
+            case FALLING:
                 
-        this.x += x * speed;
-        this.y += y * speed;
+                this.y += speed;
+                
+                if (l.collides(getBounds())){
+                    moveState = MoveState.GROUND;
+                }
+                
+                break;
+                
+            case JUMPING:
+                
+                if (airTime < jumpHeight && Board.Direction.UP.isPressed()){
+                    y -= speed;
+                    airTime++;
+                } else {
+                    moveState = MoveState.FALLING;
+                    airTime = 0;
+                }          
+                
+                break;
+                
+            case GROUND:
+                              
+                if (Board.Direction.UP.isPressed()){
+                    moveState = MoveState.JUMPING;
+                }
+                
+                break;
+            
+        }
+        
+        if (Board.Direction.LEFT.isPressed()){
+            x -= speed;
+        }
+        
+        if (Board.Direction.RIGHT.isPressed()){
+            x += speed;
+        }
     }
 }
