@@ -15,10 +15,6 @@ import java.awt.Point;
  */
 public class Player extends Sprite{
     
-    //defines how big the sprite itself is, although this doesn't reflect the
-    //size of the sprite sheet.
-    private int width, height;
-    
     //This is the number of frames on the sprite sheet, and which frame we're 
    //currently displaying
     private int frames, currentFrame;
@@ -27,13 +23,8 @@ public class Player extends Sprite{
     //different frame rate thant he base game timer.
     private int frameDelay, delayCount;
     
-    //This enum is used to interperet input from the keyListener in Board.java
-    public enum Direction { LEFT, RIGHT, UP, DOWN };
-    
     //This int tells us how far we're goig to move each frame when we're moving
-    private int speed, jumpHeight, airTime;
-    
-    private Rectangle bounds;
+    private int speed, jumpSpeed, jumpHeight, airTime;
     
     private enum MoveState { JUMPING, FALLING, GROUND }
     
@@ -49,26 +40,23 @@ public class Player extends Sprite{
         this.frameDelay = 9;
         delayCount = 0;
         speed = 5;
-        MoveState moveState;
         bounds = new Rectangle(0, 0, 0, 0);
     }
     
     public Player(BufferedImage image, int x, int y, int width, int height,
             int frames) {
         
-        super(image, x, y);
+        super(image, x, y, width, height);
         
-        this.width = width;
-        this.height = height;
         this.frames = frames;
         currentFrame = 0;
-        frameDelay = 9;
+        frameDelay = 15;
         delayCount = 0;
-        speed = 5;
-        jumpHeight = 22;
+        speed = 3;
+        jumpSpeed = 6;
+        jumpHeight = 44;
         airTime = 0;
         moveState = MoveState.FALLING;
-        bounds = new Rectangle(this.x, this.y, width, height);
     }
     
     //This method covers all of our logic to draw the sprite.
@@ -96,39 +84,28 @@ public class Player extends Sprite{
         }
     }
     
-    public Rectangle getBounds(){
-        bounds.setLocation(x, y);
-        return bounds;
-    }
-    
-    public boolean collides(Rectangle r){
-        getBounds();
-        
-        if(bounds.intersects(r)){
-            return true;
-        } else {
-            return false;
-        }
-    }
-    
+    //This handles all our movement, including checking collision to make sure
+    //we don't phase through any objects. We pass in the level, which is a
+    //collection of all the 
     public void move(Level l){
         
         switch (moveState){
             
             case FALLING:
                 
-                this.y += speed;
-                
                 if (l.collides(getBounds())){
                     moveState = MoveState.GROUND;
+                    break;
                 }
+                
+                this.y += jumpSpeed;
                 
                 break;
                 
             case JUMPING:
                 
                 if (airTime < jumpHeight && Board.Direction.UP.isPressed()){
-                    y -= speed;
+                    y -= jumpSpeed;
                     airTime++;
                 } else {
                     moveState = MoveState.FALLING;
@@ -141,6 +118,10 @@ public class Player extends Sprite{
                               
                 if (Board.Direction.UP.isPressed()){
                     moveState = MoveState.JUMPING;
+                }
+                
+                if (!l.collides(getBounds())){
+                    moveState = MoveState.FALLING;
                 }
                 
                 break;

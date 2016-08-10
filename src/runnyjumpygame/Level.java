@@ -6,6 +6,7 @@
 package runnyjumpygame;
 
 import java.awt.Rectangle;
+import java.awt.Graphics;
 
 import java.util.Vector;
 /**
@@ -17,24 +18,31 @@ import java.util.Vector;
 //the background and walls of the play space.
 public class Level {
     
-    private Vector<Rectangle> floors;
+    private Vector<Platform> platforms;
     
     Level(){
-        floors = new Vector<Rectangle>();
+        platforms = new Vector<Platform>();
     }
     
-    public void add (Rectangle r){
-        floors.add(r);
+    public void add (Platform r){
+        platforms.add(r);
     }
     
     public boolean collides (Rectangle r){
         
-        for (Rectangle rect : floors){
-            if (rect.intersects(r)){
+        for (Platform sprt : platforms){
+            if (sprt.collides(r)){
                 return true;
             }
         }
         
         return false;
+    }
+    
+    public void draw(Graphics g){
+        
+        for (Platform sprt : platforms){
+            sprt.draw(g);
+        }
     }
 }

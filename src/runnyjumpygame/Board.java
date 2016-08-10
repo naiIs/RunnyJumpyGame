@@ -34,7 +34,7 @@ import javax.swing.Timer;
  */
 
 //The main class of our game. We're extending a JPanel because it's a "generic
-//space where stuff happend" and implementing ActionListener because we're
+//space where stuff happens" and implementing ActionListener because we're
 //using a timer event to fire and catch action events repeatedly to itterate
 //the game loop
 public class Board extends JPanel
@@ -45,25 +45,20 @@ public class Board extends JPanel
     private final int B_HEIGHT = 400;
     
     //A constant to define the timer delay in MS, essentially how long the
-    //game waits to execute each frame. Setting it to 33 runs the game at 
-    //30 frames per second
-    private final int DELAY = 18;
+    //game waits to execute each frame.
+    private final int DELAY = 10;
     
     //define the timer object that's going to iterate the game. This is a swing
     //timer, not a java.util timer
     private Timer timer;
     
-    //An image to hold our moving sprite
-    BufferedImage smiley;
+    //The player object, which is moveable and interactable
+    public Player player;
     
-    //A bunch of temporary testing variables
-    public int a = 0;
-    public Player mySprite;
-    
-    public Rectangle screenBottom;
-    
+    //The level object, which is a collection of platforms that determine collision
     public Level level;
     
+    //The Direction enum helps us know what state our keyboard is in.
     public enum Direction { 
         LEFT    (KeyEvent.VK_LEFT), 
         RIGHT   (KeyEvent.VK_RIGHT), 
@@ -115,27 +110,36 @@ public class Board extends JPanel
         timer = new Timer(DELAY, this);
         timer.start();
         
-        //load an image from the game's root directory into our saved 
-        //buffered image
+        //Call loadLevel to populate the playspace
+        loadLevel();
+        
+        //call loadPlayer to add our controllable sprite to the play space
+        loadPlayer();
+    }
+    
+    //This method loads an image and then creates a player object
+    private void loadPlayer(){
+                
         try {
             
-            smiley = ImageIO.read(new File("smiley.png"));            
-        } catch (IOException e) {
+            BufferedImage p = ImageIO.read(new File("dude.png"));
             
-        }
-        
+            player = new Player(p, 40, 40, 11, 45, 4);
+        } catch (IOException e) {        }
+    }
+    
+    //This method loads our level and populates our level object.
+    private void loadLevel(){
+                
         level = new Level();
         
-        //Create a new sprite with the image that we just loaded
-        //mySprite = new Sprite(smiley, 90, 90);
-        //mySprite = new Player(smiley, 190, 190);
-        mySprite = new Player(smiley, 40, 40, 30, 30, 4);
-        
-        screenBottom = new Rectangle(0, 350, B_WIDTH, 1);
-        
-        level.add(screenBottom);
-        
-        System.out.println("lolstuff");
+        try {
+            
+            BufferedImage p = ImageIO.read(new File("bottom.png"));
+            
+            level.add(new Platform(p, 0, 375, B_WIDTH, 25));
+            level.add(new Platform(p, 200, 200, B_WIDTH, 25));
+        } catch (IOException e) {        }
     }
     
     //This paints the images, first by calling the super class's paintComponent
@@ -152,7 +156,9 @@ public class Board extends JPanel
     //custom content.
     private void doDrawing(Graphics g) {
         
-        mySprite.draw(g);
+        level.draw(g);
+        
+        player.draw(g);
     }
     
     //This catches the action event that the timer fires over and over.
@@ -160,54 +166,18 @@ public class Board extends JPanel
     @Override
     public void actionPerformed(ActionEvent e) {
         
-        //movePlayer();
-        mySprite.move(level);
-            
-        checkCollision();
+        //Each game cycle we call the move method of our player, which reads
+        //input from the keyboard and checks if we've colided with anything
+        player.move(level);
         
+        //Each game cycle we also have to draw the game so that moving objects
+        //are repainted in their new positions and states
         repaint();
     }
     
-    public void checkCollision(){
-        
-        if (level.collides(mySprite.getBounds())){
-            System.out.println("intersects");
-        }
-        //if (mySprite.collides(screenBottom)){
-        //    System.out.println("intersects");
-        //}
-    }
-        
-    private void movePlayer(){
-        
-        int x = 0, y = 0;
-        
-        if((!mySprite.collides(screenBottom)) && (!Direction.UP.isPressed())){
-            y++;
-        }
-        
-        if(mySprite.collides(screenBottom)){
-            y = 0;
-        }
-        
-        if (Direction.UP.isPressed()){
-            //mySprite.jump();
-        }
-        
-        if (Direction.LEFT.isPressed()){
-            x--;
-        }
-        
-        if (Direction.RIGHT.isPressed()){
-            x++;
-        }
-        
-        //mySprite.move(x, y);
-    }
-    
     //This is a sub class that records our key presses. We're using this sub-
-    //class because we only care about keyPressed and keyReleased, not
-    //keyTyped
+    //class and not having Board implement KeyListener because we only care about
+    //keyPressed and keyReleased, not keyTyped
     private class TAdapter extends KeyAdapter {
         
         @Override
