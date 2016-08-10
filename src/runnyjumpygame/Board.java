@@ -96,7 +96,8 @@ public class Board extends JPanel
         
         //This creates our TAdapter object and implements it as Board's
         //prerred key listener, which gets input from the keyboard
-        addKeyListener(new TAdapter());
+        KeyAdapter t = new TAdapter();
+        addKeyListener((KeyListener)t);
         
         //calls a method to initialize the game to its basic state
         initGame();
@@ -169,9 +170,7 @@ public class Board extends JPanel
         //Each game cycle we call the move method of our player, which reads
         //input from the keyboard and checks if we've colided with anything
         player.move(level);
-        
-        //Each game cycle we also have to draw the game so that moving objects
-        //are repainted in their new positions and states
+            
         repaint();
     }
     
@@ -200,6 +199,22 @@ public class Board extends JPanel
             if (key == KeyEvent.VK_DOWN){
                 Direction.DOWN.press();
             }
+            
+            /*if (key == KeyEvent.VK_LEFT){
+                ((Player)mySprite).move(Player.Direction.LEFT);
+            }
+            
+            if (key == KeyEvent.VK_RIGHT){
+                ((Player)mySprite).move(Player.Direction.RIGHT);
+            }
+            
+            if (key == KeyEvent.VK_UP){
+                ((Player)mySprite).move(Player.Direction.UP);
+            }
+            
+            if (key == KeyEvent.VK_DOWN){
+                ((Player)mySprite).move(Player.Direction.DOWN);
+            }*/
         }
         
         @Override
