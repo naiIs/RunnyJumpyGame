@@ -53,10 +53,12 @@ public class Board extends JPanel
     private Timer timer;
     
     //The player object, which is moveable and interactable
-    public Player player;
+    private Player player;
+    
+    private Hostile hostile;
     
     //The level object, which is a collection of platforms that determine collision
-    public Level level;
+    private Level level;      
     
     //The Direction enum helps us know what state our keyboard is in.
     public enum Direction { 
@@ -125,7 +127,14 @@ public class Board extends JPanel
             
             BufferedImage p = ImageIO.read(new File("dude.png"));
             
-            player = new Player(p, 40, 40, 11, 45, 4);
+            player = new Player(p, 250, 40, 11, 45, 4);
+        } catch (IOException e) {        }
+        
+        try {
+            
+            BufferedImage p = ImageIO.read(new File("hostile.png"));
+            
+            hostile = new Hostile(p, 200, 40, 15, 15, 2);
         } catch (IOException e) {        }
     }
     
@@ -138,14 +147,16 @@ public class Board extends JPanel
             
             BufferedImage p = ImageIO.read(new File("bottom.png"));
             
-            level.add(new Platform(p, 0, 375, B_WIDTH, 25));
-            level.add(new Platform(p, 200, 200, B_WIDTH, 25));
+            level.addPlatform(new Platform(p, 0, 370, B_WIDTH, 25));
+            level.addPlatform(new Platform(p, 200, 200, B_WIDTH, 25));
+            level.addPlatform(new Platform(p, B_WIDTH, 370, B_WIDTH, 25));
+            level.addPlatform(new Platform(p, -B_WIDTH, 370, B_WIDTH, 25));
         } catch (IOException e) {        }
     }
     
     //This paints the images, first by calling the super class's paintComponent
     //method to paint all the default stuff, then by calling our doDrawing
-    //method to paint all the stuff that we want painted
+    //method to paint all custom game content that we want painted
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -159,6 +170,8 @@ public class Board extends JPanel
         
         level.draw(g);
         
+        hostile.draw(g);
+        
         player.draw(g);
     }
     
@@ -170,7 +183,11 @@ public class Board extends JPanel
         //Each game cycle we call the move method of our player, which reads
         //input from the keyboard and checks if we've colided with anything
         player.move(level);
-            
+        
+        hostile.move(player);
+                
+        System.out.println( level.getOrigin().getX() );
+        //Repaint everything, drawing the game frame.    
         repaint();
     }
     
@@ -199,22 +216,6 @@ public class Board extends JPanel
             if (key == KeyEvent.VK_DOWN){
                 Direction.DOWN.press();
             }
-            
-            /*if (key == KeyEvent.VK_LEFT){
-                ((Player)mySprite).move(Player.Direction.LEFT);
-            }
-            
-            if (key == KeyEvent.VK_RIGHT){
-                ((Player)mySprite).move(Player.Direction.RIGHT);
-            }
-            
-            if (key == KeyEvent.VK_UP){
-                ((Player)mySprite).move(Player.Direction.UP);
-            }
-            
-            if (key == KeyEvent.VK_DOWN){
-                ((Player)mySprite).move(Player.Direction.DOWN);
-            }*/
         }
         
         @Override

@@ -6,82 +6,46 @@
 package runnyjumpygame;
 
 import java.awt.image.BufferedImage;
-import java.awt.Graphics;
-import java.awt.Rectangle;
-import java.awt.Point;
 /**
  *
  * @author logan
  */
-public class Player extends Sprite{
-    
-    //This is the number of frames on the sprite sheet, and which frame we're 
-   //currently displaying
-    private int frames, currentFrame;
-    
-    //This is the delay between frames, so that sprites can be animated at a
-    //different frame rate thant he base game timer.
-    private int frameDelay, delayCount;
+public class Player extends AnimatedSprite{
     
     //This int tells us how far we're goig to move each frame when we're moving
     private int speed, jumpSpeed, jumpHeight, airTime;
     
-    private enum MoveState { JUMPING, FALLING, GROUND }
+    private enum JumpState { JUMPING, FALLING, GROUND }
+    
+    private enum MoveState { LEFT, RIGHT, STATIONARY }
+    
+    JumpState jumpState;
     
     MoveState moveState;
-    
-    public Player() {
-        super();
-        
-        this.width = 0;
-        this.height = 0;
-        this.frames = 0;
-        this.currentFrame = 0;
-        this.frameDelay = 9;
-        delayCount = 0;
-        speed = 5;
-        bounds = new Rectangle(0, 0, 0, 0);
-    }
     
     public Player(BufferedImage image, int x, int y, int width, int height,
             int frames) {
         
-        super(image, x, y, width, height);
+        super(image, x, y, width, height, frames);
         
-        this.frames = frames;
-        currentFrame = 0;
-        frameDelay = 15;
-        delayCount = 0;
         speed = 3;
-        jumpSpeed = 6;
-        jumpHeight = 44;
+        jumpSpeed = 9;
+        jumpHeight = 25;
         airTime = 0;
-        moveState = MoveState.FALLING;
+        jumpState = JumpState.FALLING;
+        moveState = MoveState.STATIONARY;
     }
     
-    //This method covers all of our logic to draw the sprite.
-    @Override
-    public void draw(Graphics g){        
-        
-        //Here we draw a portion of the sprite sheet, placing it at x and y on
-        //the screen and drawing a portion of the sprite sheet defined
-        //by the current frame
-        g.drawImage(image, 
-                x, y, (x + width), (y + height), 
-                (currentFrame * width), 0, (currentFrame * width + width), height,
-                null);
-        
-        //this is our logic to step through frames. We count frames until the
-        //frame delay is up and then move to the next frame
-        delayCount++;
-        if (delayCount == frameDelay){
-            currentFrame++;
-            delayCount = 0;
-        }
-        
-        if (currentFrame == frames) {
-           currentFrame = 0;
-        }
+    public int getSpeed(){
+        return speed;
+    }
+    
+    public int getX(){
+        return x;
+    }
+    
+    public int getY(){
+        return y;
     }
     
     //This handles all our movement, including checking collision to make sure
@@ -89,12 +53,12 @@ public class Player extends Sprite{
     //collection of all the 
     public void move(Level l){
         
-        switch (moveState){
+        switch (jumpState){
             
             case FALLING:
                 
                 if (l.collides(getBounds())){
-                    moveState = MoveState.GROUND;
+                    jumpState = JumpState.GROUND;
                     break;
                 }
                 
@@ -103,12 +67,14 @@ public class Player extends Sprite{
                 break;
                 
             case JUMPING:
-                
+                                
                 if (airTime < jumpHeight && Board.Direction.UP.isPressed()){
+                    
                     y -= jumpSpeed;
                     airTime++;
+                    
                 } else {
-                    moveState = MoveState.FALLING;
+                    jumpState = JumpState.FALLING;
                     airTime = 0;
                 }          
                 
@@ -117,23 +83,52 @@ public class Player extends Sprite{
             case GROUND:
                               
                 if (Board.Direction.UP.isPressed()){
-                    moveState = MoveState.JUMPING;
+                    
+                    jumpState = JumpState.JUMPING;
                 }
                 
                 if (!l.collides(getBounds())){
-                    moveState = MoveState.FALLING;
+                    jumpState = JumpState.FALLING;
                 }
                 
                 break;
             
-        }
+        }            
         
-        if (Board.Direction.LEFT.isPressed()){
+        //This moves the player left and right. If we're in our play area (the 
+        //on screen that the player sprite can move in) and we press left or 
+        //right we move the player, if we're at the edge of the play area we
+        //scroll the level instead.
+        if (Board.Direction.LEFT.isPressed() 
+                && !getBounds().intersects(l.outLeft())){
+            
+            //if (jumpState == JumpState.JUMPING
+            //        && l.collides(getBounds())){
+            //    x += speed;
+            //}
+            
             x -= speed;
         }
         
-        if (Board.Direction.RIGHT.isPressed()){
+        if (Board.Direction.LEFT.isPressed() 
+                && getBounds().intersects(l.outLeft())){
+            l.scroll(speed);
+        }
+        
+        if (Board.Direction.RIGHT.isPressed() 
+                && !getBounds().intersects(l.outRight())){
+            
+            //if (jumpState == JumpState.JUMPING
+            //        && l.collides(getBounds())){
+            //    x -= speed;
+            //}
+                
             x += speed;
+        }
+        
+        if (Board.Direction.RIGHT.isPressed() 
+                && getBounds().intersects(l.outRight())){
+            l.scroll(-speed);
         }
     }
 }

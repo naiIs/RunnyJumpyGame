@@ -17,4 +17,7 @@ public class Platform extends Sprite{
         super(image, x, y, width, height);
     }
     
+    public void scroll(int magnitude){
+        x += magnitude;
+    }    
 }

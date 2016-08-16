@@ -74,6 +74,5 @@ public abstract class Sprite {
         } else {
             return false;
         }
-    }
-    
+    }    
 }
