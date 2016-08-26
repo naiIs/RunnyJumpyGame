@@ -53,6 +53,23 @@ public class Player extends AnimatedSprite{
     //collection of all the 
     public void move(Level l){
         
+        /*This is a test movement scheme that allows free movement in 3D space.
+        if (Board.Direction.LEFT.isPressed()){
+            x -= speed;
+        }
+        
+        if (Board.Direction.RIGHT.isPressed()){
+            x += speed;
+        }
+        
+        if (Board.Direction.UP. isPressed()){
+            y -= speed;
+        }
+        
+        if (Board.Direction.DOWN.isPressed()){
+            y += speed;
+        }*/
+        
         switch (jumpState){
             
             case FALLING:
@@ -94,24 +111,7 @@ public class Player extends AnimatedSprite{
                 break;
             
         }            
-        
-        if (Board.Direction.RIGHT.isPressed() && Board.Direction.LEFT.isPressed()){
-            
-            moveState = MoveState.STATIONARY;
-            
-        } else if(Board.Direction.RIGHT.isPressed()){
-            
-            moveState = MoveState.RIGHT;
-            x += speed;
-            
-        } else if (Board.Direction.LEFT.isPressed()){
-            
-            moveState = MoveState.LEFT;
-            x -= speed;
-            
-        }
-        
-        /*
+                
         //This moves the player left and right. If we're in our play area (the 
         //on screen that the player sprite can move in) and we press left or 
         //right we move the player, if we're at the edge of the play area we
@@ -146,6 +146,6 @@ public class Player extends AnimatedSprite{
         if (Board.Direction.RIGHT.isPressed() 
                 && getBounds().intersects(l.outRight())){
             l.scroll(-speed);
-        }*/
+        }
     }
 }

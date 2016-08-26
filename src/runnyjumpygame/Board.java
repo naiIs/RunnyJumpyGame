@@ -186,6 +186,9 @@ public class Board extends JPanel
         
         hostile.move(player);
                 
+        if (level.bumpTop(player.getBounds())){
+            System.out.println("Bumping Top");
+        }
         System.out.println( level.getOrigin().getX() );
         //Repaint everything, drawing the game frame.    
         repaint();

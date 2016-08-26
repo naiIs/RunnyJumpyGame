@@ -34,6 +34,28 @@ public class Level {
         platforms.add(r);
     }
     
+    public boolean onTop (Rectangle r){
+        
+        for (Platform sprt : platforms){
+            if (sprt.collides(r)){
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    public boolean bumpTop (Rectangle r){
+        
+        for (Platform sprt : platforms){
+            if (sprt.bumpTop(r)){
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
     public boolean collides (Rectangle r){
         
         for (Platform sprt : platforms){

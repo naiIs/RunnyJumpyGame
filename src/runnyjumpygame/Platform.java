@@ -7,6 +7,7 @@ package runnyjumpygame;
 
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+
 /**
  *
  * @author logan
@@ -17,7 +18,58 @@ public class Platform extends Sprite{
         super(image, x, y, width, height);
     }
     
-    public void scroll(int magnitude){
-        x += magnitude;
+    public void scroll(int m){
+        x += m;
     }    
+    
+    public boolean bumpTop(Rectangle r){
+        if (r.intersects(getBounds()) ){
+            return true;
+        }
+        
+        return false;
+    }
+    
+    /*public boolean bumpLeft(Rectangle r){
+        
+        if(r.getX() + r.getWidth() >= x 
+                && (r.getY() + r.getHeight() >= y && r.getY() <= y + height)){
+            
+            return true;
+            
+        }
+        
+        return false;
+    }
+    
+    public boolean bumpRight(Rectangle r){
+        
+        if(r.getX() <= x + width
+                && (r.getY() <= y + height && r.getY() + r.getHeight() >= y)){
+            return true;
+        }
+        
+        return false;
+    }
+    
+    public boolean bumpTop(Rectangle r){
+        
+        if (r.getY() + r.getHeight() >= y
+                && (r.getX() <= x + width && r.getX() + r.getWidth() >= x)){
+            
+            return true;
+        }
+        
+        return false;
+    }
+    
+    public boolean bumpBot(Rectangle r){
+        
+        if (r.getY() <= y + height
+                && (r.getX() <= x + width && r.getX() + r.getWidth() >= x)){
+            return true;
+        }
+        
+        return false;
+    }*/
 }
