@@ -22,13 +22,13 @@ public class Platform extends Sprite{
         x += m;
     }    
     
-    public boolean bumpTop(Rectangle r){
+    /*public boolean bumpTop(Rectangle r){
         if (r.intersects(getBounds()) ){
             return true;
         }
         
         return false;
-    }
+    }*/
     
     /*public boolean bumpLeft(Rectangle r){
         
