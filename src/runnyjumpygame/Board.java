@@ -15,6 +15,8 @@ import java.awt.Rectangle;
 import java.awt.event.InputEvent;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
@@ -55,7 +57,8 @@ public class Board extends JPanel
     //The player object, which is moveable and interactable
     private Player player;
     
-    private Hostile hostile;
+    //the enemies object, a collection of the moving enemies that threaten the player
+    private Enemies enemies;
     
     //The level object, which is a collection of platforms that determine collision
     private Level level;      
@@ -118,6 +121,9 @@ public class Board extends JPanel
         
         //call loadPlayer to add our controllable sprite to the play space
         loadPlayer();
+        
+        //call loadHostiles to add our moving enemies to the playspace
+        loadHostile();
     }
     
     //This method loads an image and then creates a player object
@@ -129,12 +135,19 @@ public class Board extends JPanel
             
             player = new Player(p, 250, 40, 11, 45, 4);
         } catch (IOException e) {        }
+    }
+    
+    //This method loads an image then creates a hostile object
+    private void loadHostile(){
+        
+        enemies = new Enemies();
         
         try {
             
             BufferedImage p = ImageIO.read(new File("hostile.png"));
             
-            hostile = new Hostile(p, 200, 40, 15, 15, 2);
+            enemies.addHostile(new Hostile(p, 200, 40, 15, 15, 2));
+            enemies.addHostile(new Hostile(p, 100, 100, 15, 15, 2));
         } catch (IOException e) {        }
     }
     
@@ -154,6 +167,19 @@ public class Board extends JPanel
         } catch (IOException e) {        }
     }
     
+    //This method stops the timer, clears the screen, and ends the game.
+    public void gameOver(Graphics g){
+        //timer.stop();
+        
+        String msg = "Game Over";
+        Font small = new Font("Helvetica", Font.BOLD, 14);
+        FontMetrics fm = getFontMetrics(small);
+        
+        g.setColor(Color.white);
+        g.setFont(small);
+        g.drawString(msg, (B_WIDTH - fm.stringWidth(msg)) / 2, B_HEIGHT / 2);
+    }
+    
     //This paints the images, first by calling the super class's paintComponent
     //method to paint all the default stuff, then by calling our doDrawing
     //method to paint all custom game content that we want painted
@@ -170,9 +196,13 @@ public class Board extends JPanel
         
         level.draw(g);
         
-        hostile.draw(g);
+        enemies.draw(g);
         
         player.draw(g);
+        
+        if(enemies.collides(player)){
+            gameOver(g);
+        }
     }
     
     //This catches the action event that the timer fires over and over.
@@ -182,14 +212,10 @@ public class Board extends JPanel
         
         //Each game cycle we call the move method of our player, which reads
         //input from the keyboard and checks if we've colided with anything
-        player.move(level);
-        
-        hostile.move(player);
+        player.move(level, enemies);
                 
-        if (level.bumpTop(player.getBounds())){
-            System.out.println("Bumping Top");
-        }
-        System.out.println( level.getOrigin().getX() );
+        enemies.move(player);
+        
         //Repaint everything, drawing the game frame.    
         repaint();
     }

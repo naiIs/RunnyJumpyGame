@@ -33,27 +33,13 @@ public class Level {
     public void addPlatform (Platform r){
         platforms.add(r);
     }
-    
-    public boolean onTop (Rectangle r){
+
+    public void checkCollision(Player p){
         
-        for (Platform sprt : platforms){
-            if (sprt.collides(r)){
-                return true;
-            }
+        
+        for (Platform plat : platforms){
+            p.landsOn(plat.getBounds());
         }
-        
-        return false;
-    }
-    
-    public boolean bumpTop (Rectangle r){
-        
-        for (Platform sprt : platforms){
-            if (sprt.bumpTop(r)){
-                return true;
-            }
-        }
-        
-        return false;
     }
     
     public boolean collides (Rectangle r){

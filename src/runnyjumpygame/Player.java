@@ -6,6 +6,7 @@
 package runnyjumpygame;
 
 import java.awt.image.BufferedImage;
+import java.awt.Rectangle;
 /**
  *
  * @author logan
@@ -13,7 +14,7 @@ import java.awt.image.BufferedImage;
 public class Player extends AnimatedSprite{
     
     //This int tells us how far we're goig to move each frame when we're moving
-    private int speed, jumpSpeed, jumpHeight, airTime;
+    private int speed, jumpSpeed, fallSpeed, jumpHeight, airTime;
     
     private enum JumpState { JUMPING, FALLING, GROUND }
     
@@ -30,6 +31,7 @@ public class Player extends AnimatedSprite{
         
         speed = 3;
         jumpSpeed = 9;
+        fallSpeed = 9;
         jumpHeight = 25;
         airTime = 0;
         jumpState = JumpState.FALLING;
@@ -48,12 +50,65 @@ public class Player extends AnimatedSprite{
         return y;
     }
     
+    public boolean isJumping(){
+        
+        if(jumpState == JumpState.JUMPING){ return true; }
+        
+        return false;
+    }
+    
+    public boolean isFalling(){
+        
+        if(jumpState == JumpState.FALLING){ return true; }
+        
+        return false;
+    }
+    
+    public boolean isGrounded(){
+        
+        if(jumpState == JumpState.GROUND){ return true; }
+        
+        return false;
+    }
+    
+    public boolean movingLeft(){
+        
+        if(moveState == MoveState.LEFT){ return true; }
+        
+        return false;
+    }
+    
+    public boolean movingRight(){
+        
+        if(moveState == MoveState.RIGHT){ return true; }
+        
+        return false;
+    }
+    
+    public boolean movingStationary(){
+        
+        if(moveState == MoveState.STATIONARY){ return true; }
+        
+        return false;
+    }
+    
+    public boolean landsOn(Rectangle r){
+        
+        if(r.intersects(getBounds())){
+            y = (int)r.getY() + height;
+            return true;
+        }        
+        
+        return false;
+    }
+    
     //This handles all our movement, including checking collision to make sure
     //we don't phase through any objects. We pass in the level, which is a
     //collection of all the 
-    public void move(Level l){
+    public void move(Level l, Enemies e){
         
-        /*This is a test movement scheme that allows free movement in 3D space.
+        /*
+        //This is a test movement scheme that allows free movement in 3D space.
         if (Board.Direction.LEFT.isPressed()){
             x -= speed;
         }
@@ -74,12 +129,11 @@ public class Player extends AnimatedSprite{
             
             case FALLING:
                 
+                this.y += fallSpeed;
+                
                 if (l.collides(getBounds())){
                     jumpState = JumpState.GROUND;
-                    break;
                 }
-                
-                this.y += jumpSpeed;
                 
                 break;
                 
@@ -130,6 +184,7 @@ public class Player extends AnimatedSprite{
         if (Board.Direction.LEFT.isPressed() 
                 && getBounds().intersects(l.outLeft())){
             l.scroll(speed);
+            e.scroll(speed);
         }
         
         if (Board.Direction.RIGHT.isPressed() 
@@ -146,6 +201,7 @@ public class Player extends AnimatedSprite{
         if (Board.Direction.RIGHT.isPressed() 
                 && getBounds().intersects(l.outRight())){
             l.scroll(-speed);
+            e.scroll(-speed);
         }
     }
 }

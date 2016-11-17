@@ -24,6 +24,10 @@ public class Hostile extends AnimatedSprite{
         
     }
     
+    public void scroll(int m){
+        x += m;
+    }
+    
     public void move(Player p){
         
         if (y < p.getY()){
